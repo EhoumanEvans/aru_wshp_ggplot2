@@ -5,14 +5,16 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "0",
+    "hash" : "288640770",
     "id" : "C253FF76",
-    "lastKnownWriteTime" : 1587569742,
-    "last_content_update" : 1587569742,
+    "lastKnownWriteTime" : 1587573216,
+    "last_content_update" : 1587573216845,
     "path" : "/Volumes/USER-1/Projets/GitHub/aru_wshp_ggplot2/aru_wshp_ggplot2.Rmd",
     "project_path" : "aru_wshp_ggplot2.Rmd",
     "properties" : {
-        "disableDependencyDiscovery" : "1"
+        "cursorPosition" : "43,28",
+        "disableDependencyDiscovery" : "1",
+        "scrollLine" : "36"
     },
     "read_only" : false,
     "read_only_alternatives" : [

@@ -41,9 +41,7 @@ install.packages("ggthemes")
 install.packages("extrafont")
 install.packages("cowplot")
 install.packages("readr")
-install.packages("grid")
-install.packages("grid")
-install.packages("grid")
+install.packages("revealjs")
 
 -->
 
@@ -259,8 +257,7 @@ scale_y_log10()
 
 ## Part 5: Line Type
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-life_expec_sex_race <- read_csv("E:/rworkshop/data/life_expec_sex_race.csv")
-
+life_expec_sex_race <- read_csv("life_expec_sex_race.csv")
 ```
 
 ```{r echo=TRUE, fig.width = 4, fig.height = 2, message=FALSE, warning=FALSE}
@@ -444,7 +441,7 @@ library(cowplot) #Add annotation
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 library(readr)
-EconomistData <- read_csv("E:/rworkshop/data/EconomistData.csv")
+EconomistData <- read_csv("EconomistData.csv")
 View(EconomistData)
 ```  
 
