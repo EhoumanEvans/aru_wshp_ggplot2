@@ -1,0 +1,3 @@
+library(readr)
+life_expec_sex_race <- read_csv("life_expec_sex_race.csv")
+View(life_expec_sex_race)
