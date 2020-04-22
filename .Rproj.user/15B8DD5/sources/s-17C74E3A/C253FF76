@@ -1,0 +1,24 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1587572337676.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "C253FF76",
+    "lastKnownWriteTime" : 1587569742,
+    "last_content_update" : 1587569742,
+    "path" : "/Volumes/USER-1/Projets/GitHub/aru_wshp_ggplot2/aru_wshp_ggplot2.Rmd",
+    "project_path" : "aru_wshp_ggplot2.Rmd",
+    "properties" : {
+        "disableDependencyDiscovery" : "1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

@@ -1,0 +1,735 @@
+---
+title: "Data Visualization in R With ggplot2"
+author: "<br>Ehouman Evans <br> _Abidjan R users_" 
+date: "12.07.2019"
+output: 
+  revealjs::revealjs_presentation:
+    transition: slide
+---
+
+<center> <img src="ggplot2.jpg" width="500"/> </center> 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Introduction
+## Introduction
+ - ggplot2 is a data visualization package for the statistical programming language R. Created by Hadley Wickham in 2005
+ - ggplot2 stands for Grammar of Graphics
+ 
+
+## Agenda
+- ggplot2 presenation : Install and load the package
+- Basic ggplot2 graphs (Density, Bar, ...)
+- Case study
+
+
+
+# Packages required for the presentation
+## Install package
+
+
+<!--
+install.packages("ggplot2")
+install.packages("gapminder")
+install.packages("datasets")
+install.packages("tidyverse")
+install.packages("grid")
+install.packages("ggrepel")
+install.packages("ggthemes")
+install.packages("extrafont")
+install.packages("cowplot")
+install.packages("readr")
+install.packages("grid")
+install.packages("grid")
+install.packages("grid")
+
+-->
+
+
+
+
+
+# ggplot2 presenation 
+## Installation
+
+ - To install R packages in RStudio: GUI versus R Console : 
+ 1. Using the GUI: Go to the Packages tab and click Install
+ 2. Using the R Console: install.packages("package_name")
+ - **Try this R Code: install.packages("ggplot2")**
+  
+## Loading an R Package For Use
+ - Once you've installed an R package, it's then bundled with R and RStudio.
+ - However, to access these files you must load your R package.
+ -  **Try this R Code: library(ggplot2)**
+
+# ggplot2 code
+## General structure
+```{r, eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
+ggplot(data = <DATA>),  <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>))
+```
+
+## ggplot2 structure exemple (1)
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+library(ggplot2)
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy))
+```
+ 
+## ggplot2 structure exemple (2)
+```{r echo=TRUE, fig.width = 6, fig.height = 3, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(gapminder)
+ggplot(gapminder, aes(x = gdpPercap, y = lifeExp))  
+```
+
+## ggplot2 structure exemple (3)
+```{r echo=TRUE, fig.width = 4, fig.height = 2, message=FALSE, warning=FALSE}
+library(ggplot2)
+ggplot(gapminder, aes(x = gdpPercap, y = lifeExp))  + geom_point()
+```
+
+## ggplot2 structure exemple (4)
+```{r echo=TRUE, fig.width = 4, fig.height = 2, message=FALSE, warning=FALSE}
+ggplot(gapminder, aes(x=gdpPercap, y=lifeExp)) + geom_point() + scale_x_log10()
+```
+ 
+## ggplot2 full syntax
+```{r, eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
+ggplot(data = data_frame) + aes(x = variable_1, y = variable_2, lty = , color = ) 
++ geom_line() + labs(title = "Title of Graph", x = "new x label", y = "new y label") + 
+theme(panel.background = element_rect(fill = "background_color")) + xlim() +
+ylim()
+```
+
+# The data...
+## List of datasets
+Gapminder: For each of 142 countries, the package provides values for life expectancy, GDP per capita, and population, every five years, from 1952 to 2007.
+
+airquality: Daily air quality measurements in New York, May to September 1973.
+
+mtcars: Motor Trend Car Road Tests.
+
+mpg: Mileage per gallon performances of various cars.
+
+## Loading the data set to process
+**install.packages("gapminder")**
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+library(gapminder)
+library(datasets)
+```
+
+## Viewing the Data as a Spreadsheet
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+library(gapminder)
+View(gapminder)
+
+```
+
+## Viewing the Data as a Spreadsheet
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+View(airquality)
+```
+
+## Descritption of datasets (1)
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+str(gapminder)
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+library(tidyverse)
+glimpse(gapminder)
+```
+
+## Descritption of datasets (2)
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+length(unique(gapminder$country))
+unique(gapminder$country)
+```
+
+# ggplot2 geom_a()
+## Part 1: Density Plots (geom_density())
+**Simple**
+```{r echo=TRUE, fig.width = 4, fig.height = 2, message=FALSE, warning=FALSE}
+dsp <- ggplot(airquality, aes(x = Ozone)) +
+  geom_density()
+dsp
+```
+
+## Part 1: Density Plots (geom_density())
+**Simple**
+
+```{r echo=TRUE, fig.width = 4, fig.height = 2, message=FALSE, warning=FALSE}
+# Customising axis labels
+dsp <- dsp + scale_x_continuous(name = "Mean ozone in parts per billion") +
+  scale_y_continuous(name = "Density")
+dsp
+```
+
+## Part 1: Density Plots (geom_density())
+**Simple**
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# ggplot also allows for the use of multiline names 
+dsp <- dsp + scale_x_continuous(name = "Mean ozone in\nparts per billion")
+dsp
+```
+
+
+## Part 1: Density Plots (geom_density())
+**Complexe**
+
+```{r echo=TRUE, fig.width = 4, fig.height = 2, message=FALSE, warning=FALSE}
+fill <- "forestgreen"
+line <- "tomato1"
+
+dsp <- ggplot(airquality, aes(x = Ozone)) +
+  geom_density(fill = fill, colour = line) +
+  scale_x_continuous(name = "Mean ozone in\nparts per billion",
+                     breaks = seq(0, 200, 25),
+                     limits=c(0, 200)) +
+  scale_y_continuous(name = "Density") +
+  ggtitle("Density plot of mean ozone")
+dsp
+
+```
+
+## Part 1: Density Plots (geom_density())
+**Complexe**
+```{r echo=TRUE, fig.width = 4, fig.height = 2, message=FALSE, warning=FALSE}
+ggplot(data=gapminder, aes(x=lifeExp, fill=continent)) +
+  geom_density(alpha=0.3)
+```
+
+## Part 3: Bar charts (geom_bar()/ geom_col())
+
+```{r echo=TRUE, fig.width = 4, fig.height = 2, message=FALSE, warning=FALSE}
+ggplot(gapminder, aes(x=continent)) + geom_bar()
+```
+
+## Part 3: Bar charts (geom_bar()/ geom_col())
+```{r echo=TRUE, fig.width = 4, fig.height = 2, message=FALSE, warning=FALSE}
+ggplot(gapminder, aes(x=continent, fill=continent)) + geom_bar()
+```
+
+## Part 3: Bar charts (geom_bar()/ geom_col())
+```{r echo=TRUE, fig.width = 4, fig.height = 2, message=FALSE, warning=FALSE}
+by_continent <- gapminder %>% filter(year == 2007) %>% group_by(continent) %>% 
+summarize(medianGdpPercap = median(gdpPercap))
+
+ggplot(by_continent , aes(x = continent, y = medianGdpPercap)) + geom_col()
+```
+
+## Part 3: Bar charts (geom_histogram())
+
+```{r echo=TRUE, fig.width = 4, fig.height = 2, message=FALSE, warning=FALSE}
+ggplot(airquality) + geom_histogram(mapping=aes(Ozone))
+```
+
+## Part 3: Bar charts (geom_histogram())
+```{r echo=TRUE, fig.width = 4, fig.height = 2, message=FALSE, warning=FALSE}
+gapminder_2007 <- gapminder %>% filter(year == 2007)
+ggplot(gapminder_2007 , aes(x = pop)) + geom_histogram() + scale_x_log10()
+```
+
+## Part 3: Bar charts (geom_histogram())
+```{r echo=TRUE, fig.width = 4, fig.height = 2, message=FALSE, warning=FALSE}
+ggplot(gapminder_2007) + geom_histogram(mapping=aes(gdpPercap))
+```
+
+
+## Part 4: Scatterplots (geom_point())
+```{r echo=TRUE, fig.width = 4, fig.height = 2, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(gapminder)
+library(tidyverse)
+gapminder_2007 <- gapminder %>% filter(year == 2007)
+ggplot(gapminder_2007 , aes(x = gdpPercap, y = lifeExp)) + geom_point()
+
+```
+
+## Part 4: Scatterplots (geom_point())
+```{r echo=TRUE, fig.width = 4, fig.height = 2, message=FALSE, warning=FALSE}
+ggplot(gapminder_2007 , aes(x = gdpPercap, y = lifeExp)) + geom_point() + scale_x_log10() +
+scale_y_log10()
+
+```
+
+## Part 5: Line Type
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+life_expec_sex_race <- read_csv("E:/rworkshop/data/life_expec_sex_race.csv")
+
+```
+
+```{r echo=TRUE, fig.width = 4, fig.height = 2, message=FALSE, warning=FALSE}
+ggplot(life_expec_sex_race) + aes(x = Year, y = Avg_Life_Expec, color = Sex, lty = Race) +
+geom_line() + scale_linetype_manual(values = c("longdash", "dotdash", "twodash"))
+
+```
+
+## Part 5: Line Type
+**Scale Limits**
+
+```{r echo=TRUE, fig.width = 4, fig.height = 2, message=FALSE, warning=FALSE}
+life_expec_sex <- life_expec_sex_race[,-2]
+ggplot(life_expec_sex) + aes(x = Year, y = Avg_Life_Expec, color = Sex) +
+geom_line() + xlim(1915, 1920) + ylim(35, 60)
+```
+
+## Part 5: Line Type
+**Coloring**
+```{r echo=TRUE, fig.width = 4, fig.height = 2, message=FALSE, warning=FALSE}
+ggplot(gapminder_2007 , aes(x = gdpPercap, y = lifeExp, color = continent, size = pop)) + 
+geom_point() + scale_x_log10() + scale_y_log10()
+```
+
+## Part 5: Line Type
+**Coloring**
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+ggplot(life_expec_sex_race) + aes(x = Year, y = Avg_Life_Expec, color = Sex, lty = Race) +
+geom_line() + scale_color_manual(values = c("magenta", "orange", "blue")) +
+scale_linetype_manual(values = c("longdash", "dotdash", "dotted"))
+```
+
+
+## Part 5: Line Type
+**Coloring**
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+ggplot(life_expec_sex_race) + aes(x = Year, y = Avg_Life_Expec, lty = Race) + 
+geom_line() + scale_linetype_manual(values = c(1,3, 2)) + facet_wrap(~Sex, ncol = 3) + 
+theme(panel.background = element_rect(fill = "white"))
+```
+
+## Part 5: Line Type
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+data <- gapminder %>% group_by(year) %>% summarize(medianGdpPercap = median(gdpPercap))
+ggplot(data , aes(x = year, y = medianGdpPercap)) + geom_line() + expand_limits(y = 0)
+```
+
+
+## Part 5: Faceting
+**One colum**
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+ggplot(gapminder , aes(x =gdpPercap, y = lifeExp, color = continent )) + 
+geom_point() + scale_x_log10() + scale_y_log10() + facet_wrap(~ continent, ncol = 1)
+```
+
+## Part 5: Faceting
+**Five colum**
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+ggplot(gapminder , aes(x =gdpPercap, y = lifeExp, color = continent )) + 
+geom_point() + scale_x_log10() + scale_y_log10() + facet_wrap(~ continent, ncol = 5)
+```
+
+## Part 5: Faceting
+**Change axis title of graph**
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+ggplot(life_expec_sex_race) + aes(x = Year, y = Avg_Life_Expec, lty = Race) + 
+geom_line() + scale_linetype_manual(values = c(1,2,3)) + facet_wrap(~Sex, ncol = 2) + 
+labs(title = "AbidjanRUsers", x = "Années",
+y = "Average Life Expectancy (Years)") + 
+theme(panel.background = element_rect(fill = "white"))
+```
+
+## Part 5: Faceting
+**Change titel position, ncol=1(library(grid)**
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+p<-ggplot(life_expec_sex_race) + aes(x = Year, y = Avg_Life_Expec, lty = Race) + 
+geom_line() + scale_linetype_manual(values = c(1,3, 10)) + facet_wrap(~Sex, ncol = 3) + 
+labs(title = " ", x = "Années",
+y = "Average Life Expectancy (Years)") + 
+theme(panel.background = element_rect(fill = "white"))
+p
+```
+
+## Part 5: Faceting
+**Change titel position, ncol=1(library(grid)**
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+library(grid)
+library(ggplot2)
+p+ theme(plot.margin=unit(c(0.5, 1, 2, 0.5), "lines"))
+grid.text("United States Life Expectancy: 100 Years of Change", x = unit(0.5, "npc"), y = unit(0, "npc"),
+          vjust = -0.5, gp = gpar(cex=1.2))
+p
+```
+
+
+## Part 6: Boxblot (geom_boxplot())
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+ggplot(gapminder_2007, aes(x = continent, y = gdpPercap)) + geom_boxplot() + scale_y_log10()+ ggtitle("Comparing GDP per capita across continents")
+```
+
+## Part 6: Boxblot (geom_boxplot())
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+ggplot(gapminder_2007, aes(x = continent, y = gdpPercap)) + geom_boxplot() + scale_y_log10()
+```
+
+
+# Aesthetics / Tweaking
+## Color
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, color = class))
+```
+
+## Color
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+ggplot(mtcars, aes(wt, mpg)) +
+  geom_point(shape = 21, color = "cadetblue4", fill = "lightgoldenrod1", size = 5, stroke = 3)
+```
+
+
+## Shape
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, shape = class))
+```
+
+# Layers
+## Regression Line
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, color = class)) + 
+  geom_smooth(mapping = aes(x = displ, y = hwy))
+```
+
+## Regression Line
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+ggplot(data = gapminder_2007) + 
+  geom_point(mapping = aes(x = gdpPercap, y = lifeExp, color = continent  )) + 
+  geom_smooth(mapping = aes(x = gdpPercap, y = lifeExp))
+```
+
+## Regression Line
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+ggplot(gapminder_2007, aes(gdpPercap, lifeExp)) +
+  geom_point() +
+  geom_smooth(method = lm, formula = y ~ splines::bs(x, 3), se = FALSE)
+```
+
+## Regression Line
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+ggplot(gapminder_2007, aes(gdpPercap, lifeExp)) +
+  geom_point() +
+  geom_smooth(method = "auto", se = FALSE)
+```  
+ 
+
+# Re-create The Economist graph using ggplot2
+## Required Packages
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+library(ggrepel) #Add point labels
+library(ggplot2) #Main package for graph
+library(ggthemes)#Themes for formating
+```  
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+library(extrafont)#Adding more font format (this package is optional because it will took sometimes for install all the font)
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+## Registering fonts with R
+library(grid) #Add grid line
+library(cowplot) #Add annotation
+```  
+
+## The Economist dataset
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+library(readr)
+EconomistData <- read_csv("E:/rworkshop/data/EconomistData.csv")
+View(EconomistData)
+```  
+
+
+## Cleaning up
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+EconomistData$Region <- factor(EconomistData$Region,
+                     levels = c("EU W. Europe",
+                                "Americas",
+                                "Asia Pacific",
+                                "East EU Cemt Asia",
+                                "MENA",
+                                "SSA"),
+                     labels = c("OECD",
+                                "Americas",
+                                "Asia &\nOceania",
+                                "Central &\nEastern Europe",
+                                "Middle East &\nnorth Africa",
+                                "Sub-Saharan\nAfrica"))
+```
+
+
+## Basic graph
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+graph1 <-  ggplot(EconomistData, aes (x=CPI, y=HDI))
+graph1 + geom_point(aes(color = Region))
+```
+
+## Basic graph
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+graph1 + geom_point(aes(color = Region),
+                    shape=21, 
+                    fill= "White")
+```                    
+
+## Basic graph
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+g2 <- graph1 + geom_point(aes(color = Region),
+                          shape=21, 
+                          fill= "White",
+                          size =3, 
+                          stroke=1.5)
+                        
+ggdraw(g2)
+```                    
+     
+## Fit line
+*geom_line *
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+g2 + geom_line(method = "lm", 
+                 formula = y ~log(x))
+```       
+
+## Fit line
+*geom_smooth *
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+g2 + geom_smooth(method = "lm", 
+                 formula = y ~log(x))
+```
+
+## Fit line
+*geom_smooth *
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+g2 + geom_smooth(method = "lm",
+                 formula = y ~log(x), 
+                 se=FALSE)
+```       
+
+## Fit line
+*Change the color of the line*
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+g3 <- g2 + geom_smooth(aes(fill="red"),method = "lm", 
+                       formula = y ~log(x),
+                       se=FALSE, 
+                       linetype=1 , 
+                       color= "Red") 
+
+ggdraw(g3)
+```       
+
+## Labeling point
+*All Countries*
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+g3 + geom_text(aes(label = Country))
+```
+
+## Labeling point
+*identify some countries*
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+point_1 <- c( "Venezuela", "Iraq", "Myanmar", "Sudan",
+                    "Afghanistan", "Congo", "Greece", "Argentina", 
+                    "India", "Italy",
+                    "Botswana", "Cape Verde", "Bhutan", "Rwanda", "France",
+                    "United States",  "Britain", "Barbados", "Norway", 
+                    "New Zealand", "Singapore", "Côte d'Ivoire", "Ghana", "Burkina Fasa")
+point_2 <- c("Russia","Brazil","Spain","Germany", "Japan","China","South Africa")
+point_3 <-  c( "Venezuela", "Iraq", "Myanmar", "Sudan",
+               "Afghanistan", "Congo", "Greece", "Argentina", 
+               "India", "Italy",
+               "Botswana", "Cape Verde", "Bhutan", "Rwanda", "France",
+               "United States",  "Britain", "Barbados", "Norway", 
+               "New Zealand", "Singapore","Russia","Brazil","Spain","Germany", "Japan","China","South Africa")
+```
+
+## Labeling point
+*identify some countries*
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+g3 +geom_text(data=EconomistData[EconomistData$Country %in% point_1,], aes(label=Country))
+```
+
+## Labeling point
+*Avoiding overlapping the data point*
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+g4 <- g3 + geom_text_repel(data=EconomistData[EconomistData$Country %in% point_1,],
+                     aes(label=Country))
+```
+
+## Labeling point
+*Avoiding overlapping the data point*
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+g4 + geom_text_repel(data=EconomistData[EconomistData$Country %in% point_2,],
+                     aes(label=Country))
+```
+
+## Labeling point
+*Avoiding overlapping the data point*
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+g5 <- g4 + geom_text_repel(data=EconomistData[EconomistData$Country %in% point_2,],
+                     aes(label=Country),
+                     box.padding = unit(1.75, 'lines'))
+ggdraw(g5)
+```
+
+
+## Legend box 
+*Color*
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+g6 <- g5 +  scale_color_manual( values = c("#23576E", "#099FDB", 
+                                            "#29B00E", "#208F84", 
+                                            "#F55840", "#924F3E")) +
+      scale_fill_manual(name='My Lines', values=c("red"),labels=c("R^2=52%"))
+```
+
+## Legend box
+*Position*
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+g6 + theme(legend.position="top")
+
+```
+
+
+## Legend box
+*Position*
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+g7 <- g6 + theme(legend.position="top",
+                 legend.title = element_blank(),
+                 legend.box = "horizontal" ,
+                 legend.text=element_text(size=8.5)) +
+  guides(col = guide_legend(nrow = 1))
+ggdraw(g7)
+
+```
+
+
+## Grid line
+*Position*
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+g8 <- g7 + theme(panel.grid.minor = element_blank(), 
+        panel.grid.major = element_line(color = "red", size = 0.5),
+        panel.grid.major.x = element_blank(),
+        panel.background = element_blank(),
+        line = element_blank())
+ggdraw(g8)
+
+```
+
+## X-axis and Y axis
+*Normal*
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+g9 <- g8 + scale_x_continuous(expand = c(0, 0),
+                        limits=c(-.2,10.2),
+                        breaks=seq(0,10,1), 
+                        name = "Corruption Perception Index (10=Least corrupt)") +
+  scale_y_continuous(expand = c(0, 0),
+                     limits=c(0.2,1),
+                     breaks=seq(0.2,1,0.1), 
+                     name = "Human Development Index,2011 (1=best)")
+ggdraw(g9)
+```
+
+## X-axis and Y axis
+*Font*
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+g10 <-g9 +theme(axis.ticks.length = unit(.15, "cm"),
+        axis.ticks.y = element_blank(),
+        axis.title.x = element_text(color="black", 
+                                    size=10,
+                                    face="italic"),
+        axis.title.y = element_text(color="black",
+                                    size=10,
+                                    face="italic"))
+ggdraw(g10)
+```
+
+
+## Title and Footnote
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+g11 <- g10+ ggtitle("Corruption and human development\n") + 
+  theme(plot.title = element_text(hjust = -0.15, 
+                                  vjust=2.12, 
+                                  colour="black",
+                                  size = 14,
+                                  face="bold"))
+ggdraw(g11)
+
+```
+
+## Title and Footnote
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+g12 <-  add_sub(g11,"Source:Transparency International; UN Human Development report",
+                x = -0.07,
+                hjust = 0,
+                fontface = "plain",
+                size= 10) 
+ggdraw(g12)
+
+```
+
+
+# Recap
+## At this point you should have
+
+ - Created density plots and histograms
+ - Generated bar plots and box plots
+ - Customise ggplot2 graph
+ - Created scatter plots with smoothing lines and labels
+ - Mapped social science data
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+
+```
+
+# References
+## Scripts
+https://honingds.com/blog/data-visualization-using-ggplot2/#ftoc-line-plots
+
+https://ggplot.library.duke.edu/#aesthetics__tweaking
+
+http://rstudio-pubs-static.s3.amazonaws.com/284329_c7e660636fec4a42a09eed968dc47f32.html
+
+http://tutorials.iq.harvard.edu/R/Rgraphics/Rgraphics.html
+
+## Data source 1
+gapminder
+
+https://cran.r-project.org/web/packages/gapminder/README.html
+
+NCHS - Death rates and life expectancy at birt
+
+https://catalog.data.gov/dataset/age-adjusted-death-rates-and-life-expectancy-at-birth-all-races-both-sexes-united-sta-1900
+
+landdata-states.csv
+
+https://github.com/IQSS/dss-workshops/blob/master/R/Rgraphics/dataSets/landdata-states.csv
+
+## Data source 2
+The Economist Dataset
+
+http://tutorials.iq.harvard.edu/R/Rgraphics.zip
+
+Economic Data freely available online
+
+https://www.economicsnetwork.ac.uk/data_sets
+
+## Data source 3
+Motor Trend Car Road Tests
+
+https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/mtcars.html
+
+Exploration of MPG Dataset
+
+https://rpubs.com/shailesh/mpg-exploration
+
+https://www.rdocumentation.org/packages/ggplot2/versions/3.2.1/topics/mpg
